@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Infonix Task - Multi JSON Values</title>
+    <script src="https://unpkg.com/vue"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.3.1/css/foundation.min.css">
+      <style>
+          .card p {
+              margin:0;
+          }
+      </style>
+  </head>
+  <body>
+    <div class="container" id="app">
+      <h3 class="text-center">Multi JSON Values</h3> 
+      <div class="columns medium-3" v-for="post in posts.comp">
+        <div class="card">
+        
+        <div class="card-divider" v-for="locate in post.location">
+            <p>Company : {{ post.company.label }}, {{ post.company.value }}</p>
+            <p v-for="locate in post.location">Location : {{locate.label}}, {{locate.value}}</p>
+        </div>
+            
+          <div class="card-section">
+            <p><strong>RFP : </strong> {{ post.rfp.label }}, {{ post.rfp.value }} </p>
+              <p><strong>RFP Status :</strong> {{ post.rfpStatus }}.</p>
+              <p><strong>Due Date :</strong> {{ post.dueDate }}.</p>
+              <p><strong>Rooms Year :</strong> {{ post.roomsYear }}.</p>
+              <p><strong>Proposal Matched :</strong> {{ post.proposalMatched }}.</p>
+              <p><strong>Status :</strong> {{ post.status }}.</p>
+          </div>
+        </div>
+      </div>
+      <hr>
+<!--      <button class="button" style="display:block;margin:auto;" @click="getPostsViaREST">Get posts via REST</button>-->
+    </div>
+  </body>
+    <script>
+      var vm = new Vue({
+        el: '#app',
+        data: {
+          posts: []
+        },
+        mounted(){
+            axios.get("https://api.myjson.com/bins/1dzrhx")
+              .then(response => {this.posts = response.data
+                    console.log(this.posts);
+                })
+          }
+      });    
+    </script>
+</html>

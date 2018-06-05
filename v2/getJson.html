@@ -1,0 +1,81 @@
+<html>
+   <head> 
+		<title>Get Json Using VueJs</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script type = "text/javascript" src = "js/vue.js"></script>
+		<script src="js/vue-resource.js"></script> 
+		<style>
+			/* Loading   */
+				#loading {
+					display: block;
+					position: fixed;
+					top: 0;
+					left: 0; 
+					z-index: 100000;   
+					width: 100vw;
+					height: 100vh;
+					background-color: rgba(192, 192, 192, 0.5);
+					background-image: url("img/loader.gif");
+					background-repeat: no-repeat;
+					background-position: center;
+				}
+ 
+		</style> 
+   </head>
+   <body> 	
+		
+		<div  id="myJson"> 
+			<div id="loading" v-show = "loaderShow" ></div>
+			<div class="row">
+				<div class="jumbotron text-center">
+					 <h1>{{ message }}</h1>
+					 <p>{{ intro }}</p> 
+					 <p><b> Source </b> :  {{ sourceLink }}</p> 
+					 <p><b> Total Records </b> :  {{ totalRecords }}</p> 
+				</div>
+			</div>  
+
+			<div class="container">
+				<div class="panel panel-default col-sm-3"  v-for="(item, index) in jsonValue">
+				  <div class="panel-body"> <b> {{ item.label }} ({{ item.value }}) </b></div>
+				</div>
+			</div>
+			
+		</div> 
+	  
+		<script type = "text/javascript">  
+		
+			var link = 'https://api.myjson.com/bins/i46iz';
+
+			var jsonData = new Vue({ 
+				el : '#myJson',
+				data: {
+					jsonValue: [],
+					message: 'Json Array List .!',
+					intro : "Never forget! Everything is possible and nothing is impossible.",
+					sourceLink : 'https://api.myjson.com/bins/i46iz',
+					totalRecords : '',
+					loaderShow   : true
+				},
+				methods:{
+					getJsons: function(){ 
+						this.$http.get('https://api.myjson.com/bins/i46iz').then(function(response){ console.log(response);
+							this.jsonValue = response.data;  
+							this.totalRecords = response.data.length;
+							this.loaderShow = false;
+						}, function(error){
+							console.log(error.statusText);
+							this.loaderShow = false;
+						});
+					}
+				},
+				mounted: function () {
+					this.getJsons();
+				}  
+			});	 
+        </script>
+   </body>
+</html>

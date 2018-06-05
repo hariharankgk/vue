@@ -1,0 +1,86 @@
+<html>
+   <head> 
+		<title>Get Json Using VueJs</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script type = "text/javascript" src = "js/vue.js"></script>
+		<script src="js/vue-resource.js"></script> 
+		<style>
+			/* Loading   */
+				#loading {
+					display: block;
+					position: fixed;
+					top: 0;
+					left: 0; 
+					z-index: 100000;   
+					width: 100vw;
+					height: 100vh;
+					background-color: rgba(192, 192, 192, 0.5);
+					background-image: url("img/loader.gif");
+					background-repeat: no-repeat;
+					background-position: center;
+				} 
+		</style> 
+   </head>
+   <body> 	
+		<div  id="myJsonarray"> 
+			<div id="loading" v-show = "loaderShow" ></div>
+			<div class="row">
+				<div class="jumbotron text-center">
+					 <h1>{{ message }}</h1>
+					 <p>{{ intro }}</p> 
+					 <p><b> Source </b> :  {{ sourceLink }}</p> 
+					 <p><b> Total Records </b> :  {{ totalRecords }}</p> 
+				</div>
+			</div>  
+
+			<div class="container">
+				<div class="panel panel-default col-sm-3"  v-for="(item, index) in jsonarrayValue">
+					<div class="panel-body"> 
+						<p> <b> Company </b> :  {{ item.company.label }} ({{ item.company.value }})   </p>
+						<p> <b> RPF </b> :  {{ item.rfp.label }} ({{ item.rfp.value }})   </p>
+						<p> <b> Status </b> :  {{ item.status }}   </p>
+						<p> <b> RPF Status </b> :  {{ item.rfpStatus }}   </p>
+						<p> <b> Rooms Year </b> :  {{ item.roomsYear }}   </p>
+						<p> <b> Location </b> :  {{ item.location[0].label }} ({{ item.location[0].value }})   </p>						
+						<p> <b> Due Date </b> :  {{ item.dueDate }}   </p>
+						<p> <b> Proposal Matched </b> :  {{ item.proposalMatched }}   </p>
+					</div>
+				</div>
+			</div>
+			
+		</div> 
+	  
+		<script type = "text/javascript">   
+
+			var jsonData = new Vue({ 
+				el : '#myJsonarray',
+				data: {
+					jsonarrayValue: [],
+					message: 'Json Multidimensional Array List.!',
+					intro : "Never forget! Everything is possible and nothing is impossible.",
+					sourceLink : 'https://api.myjson.com/bins/1dzrhx',
+					totalRecords : '',
+					loaderShow   : true
+				},
+				methods:{
+					getJsons: function(){ 
+						this.$http.get('https://api.myjson.com/bins/1dzrhx').then(function(response){ console.log(response);
+							this.jsonarrayValue = response.data.comp;  
+							this.totalRecords = response.data.comp.length;
+							this.loaderShow = false;
+						}, function(error){
+							console.log(error.statusText);
+							this.loaderShow = false;
+						});
+					}
+				},
+				mounted: function () {
+					this.getJsons();
+				}  
+			});	 
+        </script>
+   </body>
+</html>
